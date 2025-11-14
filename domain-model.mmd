@@ -1,0 +1,26 @@
+---
+title: Ordering Context
+---
+
+classDiagram
+    class Customer {
+        <<Entity>>
+        -UUID id
+        -String fullName
+        -LocalDate birthDate
+        -String email
+        -String phone
+        -String document
+        -Boolean promotionNotificationsAllowed
+        -Boolean archived
+        -Instant registeredAt
+        -Instant archivedAt
+        -Integer loyaltyPoints
+        +addLoyaltyPoints(Integer loyaltyPointsToAdd) void
+        +archive() void
+        +enablePromotionNotifications() void
+        +disablePromotionNotifications() void
+        +changeName(String newName) void
+        +changeEmail(String newEmail) void
+        +changePhone(String newPhone) void
+    }
