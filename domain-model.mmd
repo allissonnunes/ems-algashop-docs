@@ -23,4 +23,16 @@ classDiagram
         +changeName(FullName newName) void
         +changeEmail(Email newEmail) void
         +changePhone(Phone newPhone) void
+        +changeAddress(Address newAddress)
     }
+    class Address {
+        <<ValueObject>>
+        -String street
+        -String number
+        -String complement
+        -String neighborhood
+        -String city
+        -String state
+        -ZipCode zipCode
+    }
+    Address <--* Customer: -address
