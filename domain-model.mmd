@@ -95,7 +95,7 @@ classDiagram
             -OrderId id
             -CustomerId id
             -Money totalAmount
-            -Money shippingCoast
+            -Money shippingCost
             -Quantity totalItems
             -Instant placedAt
             -Instant paidAt
@@ -114,7 +114,7 @@ classDiagram
             +addItem(ProductId productId, ProductName productName, Money unitPrice, Quantity quantity) void
             +changePaymentMethod(PaymentMethod)
             +changeBilling(BillingInfo billingInfo) void
-            +changeShipping(ShippingInfo shippingInfo, Money shippingCoast, LocalDate expectedDeliveryDate) void
+            +changeShipping(ShippingInfo shippingInfo, Money shippingCost, LocalDate expectedDeliveryDate) void
             +changeItemQuantity(OrderItemId, Quantity) void
             +removeItem(OrderItemId) void
         }
