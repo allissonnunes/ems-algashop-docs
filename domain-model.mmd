@@ -50,18 +50,18 @@ classDiagram
         class CustomerRegisteredEvent {
             <<Event>>
             -CustomerId customerId
-            -Instant registeredAt
+            -Instant registeredOn
         }
 
         class CustomerArchivedEvent {
             <<Event>>
             -CustomerId customerId
-            -Instant archivedAt
+            -Instant archivedOn
         }
     }
     Customer *-- Address: -address
-    Customer --> CustomerRegisteredEvent: emit
-    Customer --> CustomerArchivedEvent: emit
+    Customer ..> CustomerRegisteredEvent: emit
+    Customer ..> CustomerArchivedEvent: emit
 
     namespace OrderAggregate {
         class Recipient {
@@ -137,6 +137,34 @@ classDiagram
             +changeItemQuantity(OrderItemId, Quantity) void
             +removeItem(OrderItemId) void
         }
+
+        class OrderPlacedEvent {
+            <<Event>>
+            -OrderId orderId
+            -CustomerId customerId
+            -Instant placedOn
+        }
+
+        class OrderPaidEvent {
+            <<Event>>
+            -OrderId orderId
+            -CustomerId customerId
+            -Instant paidOn
+        }
+
+        class OrderReadyEvent {
+            <<Event>>
+            -OrderId orderId
+            -CustomerId customerId
+            -Instant readyOn
+        }
+
+        class OrderCanceledEvent {
+            <<Event>>
+            -OrderId orderId
+            -CustomerId customerId
+            -Instant canceledOn
+        }
     }
     Order --> Customer
     Order *-- OrderStatus: -status
@@ -144,6 +172,10 @@ classDiagram
     Order *-- Shipping: -shipping
     Order *-- Billing: -billing
     Order *-- "0..n" OrderItem: -items
+    Order ..> OrderPlacedEvent: emit
+    Order ..> OrderPaidEvent: emit
+    Order ..> OrderReadyEvent: emit
+    Order ..> OrderCanceledEvent: emit
     Shipping *-- Address: -address
     Shipping *-- Recipient: -recipient
     Billing *-- Address: -address
