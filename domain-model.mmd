@@ -214,7 +214,41 @@ classDiagram
             ~ refresh(Product) void
             ~ changeQuantity(Quantity) void
         }
+
+        class ShoppingCartCreatedEvent {
+            <<Event>>
+            -ShoppingCartId shoppingCartId
+            -CustomerId customerId
+            -Instant createdOn
+        }
+
+        class ShoppingCartItemAddedEvent {
+            <<Event>>
+            -ShoppingCartId shoppingCartId
+            -CustomerId customerId
+            -ProductId productId
+            -Instant addedOn
+        }
+
+        class ShoppingCartItemRemovedEvent {
+            <<Event>>
+            -ShoppingCartId shoppingCartId
+            -CustomerId customerId
+            -ProductId productId
+            -Instant removedOn
+        }
+
+        class ShoppingCartEmptiedEvent {
+            <<Event>>
+            -ShoppingCartId shoppingCartId
+            -CustomerId customerId
+            -Instant emptiedOn
+        }
     }
     ShoppingCart *-- "0..n" ShoppingCartItem: items
     ShoppingCart --> Customer
     ShoppingCartItem --> Product
+    ShoppingCart ..> ShoppingCartCreatedEvent: emit
+    ShoppingCart ..> ShoppingCartItemAddedEvent: emit
+    ShoppingCart ..> ShoppingCartItemRemovedEvent: emit
+    ShoppingCart ..> ShoppingCartEmptiedEvent: emit
