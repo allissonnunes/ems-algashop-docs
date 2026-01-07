@@ -35,13 +35,13 @@ paths:
                 example: '/api/v1/customers/019b962e-cebd-7910-a5df-0afe586d05fe'
               description: URL of the newly created resource
         400:
-          description: Invalid input, object invalid
+          $ref: '#/components/responses/BadRequest'
         409:
-          description: Conflict
+          $ref: '#/components/responses/Conflict'
         422:
-          description: Invalid input
+          $ref: '#/components/responses/UnprocessableEntity'
         500:
-          description: Internal server error
+          $ref: '#/components/responses/InternalServerError'
 
     get:
       summary: Retrieve all customers
@@ -59,7 +59,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Customer'
         500:
-          description: Internal server error
+          $ref: '#/components/responses/InternalServerError'
 
   /api/v1/customers/{customerId}:
     get:
@@ -85,9 +85,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Customer'
         404:
-          description: Customer not found
+          $ref: '#/components/responses/NotFound'
         500:
-          description: Internal server error
+          $ref: '#/components/responses/InternalServerError'
 
     put:
       summary: Update customer by ID
@@ -117,13 +117,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Customer'
         400:
-          description: Invalid input, object invalid
+          $ref: '#/components/responses/BadRequest'
         404:
-          description: Customer not found
+          $ref: '#/components/responses/NotFound'
         409:
-          description: Conflict
+          $ref: '#/components/responses/Conflict'
         500:
-          description: Internal server error
+          $ref: '#/components/responses/InternalServerError'
 
     delete:
       summary: Delete customer by ID
@@ -144,11 +144,58 @@ paths:
         204:
           description: Customer deleted successfully
         404:
-          description: Customer not found
+          $ref: '#/components/responses/NotFound'
         500:
-          description: Internal server error
+          $ref: '#/components/responses/InternalServerError'
 
 components:
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            BadRequest:
+              $ref: '#/components/examples/BadRequest'
+    Conflict:
+      description: Conflict
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            Conflict:
+              $ref: '#/components/examples/Conflict'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            InternalServerError:
+              $ref: '#/components/examples/InternalServerError'
+    NotFound:
+      description: Not Found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            NotFound:
+              $ref: '#/components/examples/NotFound'
+    UnprocessableEntity:
+      description: Unprocessable Entity
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            UnprocessableEntity:
+              $ref: '#/components/examples/UnprocessableEntity'
+
   schemas:
     Customer:
       type: object
@@ -335,3 +382,71 @@ components:
           nullable: false
         address:
           $ref: '#/components/schemas/Address'
+
+    Error:
+      type: object
+      description: Error object returned by the API. Using RFC 9457 (Problem Details for HTTP APIs) standard.
+      required: [ 'type', 'status', 'title', 'detail', 'instance' ]
+      properties:
+        type:
+          type: string
+          description: Error type
+          example: 'https://httpstatuses.com/400'
+        status:
+          type: integer
+          description: HTTP status code
+          example: 400
+        title:
+          type: string
+          description: Error title
+          example: 'Bad Request'
+        detail:
+          type: string
+          description: Error detail
+          example: 'Invalid request parameters'
+        instance:
+          type: string
+          description: Instance identifier
+          example: '/api/customers'
+
+  examples:
+    BadRequest:
+      summary: Bad Request
+      value:
+        type: 'https://httpstatuses.com/400'
+        status: 400
+        title: 'Bad Request'
+        detail: 'Invalid request parameters'
+        instance: '/api/customers'
+    Conflict:
+      summary: Conflict
+      value:
+        type: 'https://httpstatuses.com/409'
+        status: 409
+        title: 'Conflict'
+        detail: 'Resource conflict'
+        instance: '/api/customers/123'
+    InternalServerError:
+      summary: Internal Server Error
+      value:
+        type: 'https://httpstatuses.com/500'
+        status: 500
+        title: 'Internal Server Error'
+        detail: 'Internal server error'
+        instance: '/api/customers/123'
+    NotFound:
+      summary: Not Found
+      value:
+        type: 'https://httpstatuses.com/404'
+        status: 404
+        title: 'Not Found'
+        detail: 'Resource not found'
+        instance: '/api/customers/123'
+    UnprocessableEntity:
+      summary: Unprocessable Entity
+      value:
+        type: 'https://httpstatuses.com/422'
+        status: 422
+        title: 'Unprocessable Entity'
+        detail: 'Invalid request parameters'
+        instance: '/api/customers/123'
