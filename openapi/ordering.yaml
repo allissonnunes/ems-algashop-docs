@@ -49,6 +49,26 @@ paths:
       operationId: getAllCustomers
       tags:
         - Customers
+      parameters:
+        - name: document
+          in: query
+          description: Document type to retrieve (optional)
+          required: false
+          schema:
+            type: string
+            example: '12345'
+        - name: email
+          in: query
+          description: Email address to retrieve (optional)
+          required: false
+          schema:
+            type: string
+            format: email
+            example: 'john.doe@example.com'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/direction'
       responses:
         200:
           description: List of customers
@@ -154,6 +174,43 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
 components:
+  parameters:
+    page:
+      name: page
+      in: query
+      description: Page number (optional)
+      required: false
+      schema:
+        type: integer
+        format: int32
+        default: 0
+    size:
+      name: size
+      in: query
+      description: Page size (optional)
+      required: false
+      schema:
+        type: integer
+        format: int32
+        default: 10
+    sort:
+      name: sortByProperty
+      in: query
+      description: Sorting criteria (optional)
+      required: false
+      schema:
+        type: string
+        example: 'firstName'
+    direction:
+      name: sortDirection
+      in: query
+      description: Sorting direction (optional)
+      required: false
+      schema:
+        type: string
+        enum: [ ASC, DESC ]
+        default: ASC
+
   responses:
     BadRequest:
       description: Bad Request
