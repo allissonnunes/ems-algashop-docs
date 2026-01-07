@@ -174,6 +174,79 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   /api/v1/orders:
+    get:
+      summary: Retrieve all orders
+      description: Retrieve all orders
+      operationId: getAllOrders
+      tags:
+        - Orders
+      parameters:
+        - name: status
+          in: query
+          schema:
+            $ref: "#/components/schemas/OrderStatus"
+          description: Filter orders by status
+        - name: orderedDateFrom
+          in: query
+          example: '2021-01-01'
+          schema:
+            type: string
+            format: date
+            description: Filter orders by ordered date from
+        - name: orderedDateTo
+          in: query
+          example: '2021-01-31'
+          schema:
+            type: string
+            format: date
+            description: Filter orders by ordered date to
+        - name: totalAmountFrom
+          in: query
+          example: '100.00'
+          schema:
+            type: number
+            format: float
+            description: Filter orders by total amount from
+        - name: totalAmountTo
+          in: query
+          example: '500.00'
+          schema:
+            type: number
+            format: float
+            description: Filter orders by total amount to
+        - name: customerId
+          in: query
+          example: '019b962e-cebd-7910-a5df-0afe586d05fe'
+          schema:
+            type: string
+            format: uuid
+            description: Filter orders by customer ID
+        - name: orderId
+          in: query
+          example: '01226N0693HDE'
+          schema:
+            type: string
+            description: Filter orders by order ID
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/direction'
+      responses:
+        200:
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      content:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/OrderSummary'
+                  - $ref: '#/components/schemas/Page'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     post:
       summary: Register new order
       description: Register new order
@@ -207,6 +280,32 @@ paths:
           $ref: '#/components/responses/Conflict'
         422:
           $ref: '#/components/responses/UnprocessableEntity'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/v1/orders/{orderId}:
+    get:
+      summary: Retrieve order by ID
+      description: Retrieve order by ID
+      operationId: getOrderById
+      tags:
+        - Orders
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the order to retrieve
+      responses:
+        200:
+          description: Order retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        404:
+          $ref: '#/components/responses/NotFound'
         500:
           $ref: '#/components/responses/InternalServerError'
 
@@ -355,7 +454,6 @@ components:
           example: false
         address:
           $ref: '#/components/schemas/Address'
-
     Address:
       type: object
       required: [ 'street', 'number', 'complement', 'neighborhood', 'city', 'state', 'zipCode' ]
@@ -401,7 +499,6 @@ components:
           example: '10001'
           nullable: false
           x-validation: [ 'notBlank' ]
-
     CustomerSummary:
       type: object
       required: [ 'id', 'firstName', 'lastName', 'email', 'phone', 'archived' ]
@@ -432,7 +529,6 @@ components:
           type: boolean
           description: Indicates whether the customer is archived
           example: false
-
     CustomerInput:
       type: object
       required: [ 'firstName', 'lastName', 'email', 'document', 'phone', 'birthDate', 'promotionNotificationsAllowed', 'address' ]
@@ -482,7 +578,6 @@ components:
           nullable: false
         address:
           $ref: '#/components/schemas/Address'
-
     CustomerUpdateInput:
       type: object
       required: [ 'firstName', 'lastName', 'phone', 'promotionNotificationsAllowed', 'address' ]
@@ -512,7 +607,6 @@ components:
           nullable: false
         address:
           $ref: '#/components/schemas/Address'
-
     Error:
       type: object
       description: Error object returned by the API. Using RFC 9457 (Problem Details for HTTP APIs) standard.
@@ -538,7 +632,6 @@ components:
           type: string
           description: Instance identifier
           example: '/api/customers'
-
     Page:
       type: object
       required: [ 'content', 'number', 'size', 'totalElements', 'totalPages' ]
@@ -558,7 +651,6 @@ components:
           type: integer
           description: Total number of pages
           example: 10
-
     OrderWithProductInput:
       required:
         - customerId
@@ -810,7 +902,6 @@ components:
         phone:
           type: string
           example: "1191234564"
-
     OrderStatus:
       type: string
       description: Order status
@@ -821,6 +912,50 @@ components:
       description: Payment method
       enum: [ CREDIT_CARD, GATEWAY_BALANCE ]
       example: CREDIT_CARD
+    OrderSummary:
+      required:
+        - id
+        - customer
+        - paymentMethod
+        - totalItems
+        - totalAmount
+        - placedAt
+        - canceledAt
+        - paidAt
+        - readyAt
+        - status
+      properties:
+        id:
+          type: string
+          example: "01226N0640J7Q"
+        customer:
+          $ref: "#/components/schemas/CustomerMinimal"
+        totalItems:
+          type: integer
+          example: 2
+        totalAmount:
+          type: number
+          example: 41.98
+        placedAt:
+          type: string
+          format: date-time
+          example: "2024-04-04T00:12:45Z"
+        canceledAt:
+          type: string
+          format: date-time
+          example: "2024-04-04T00:12:45Z"
+        paidAt:
+          type: string
+          format: date-time
+          example: "2024-04-04T00:12:45Z"
+        readyAt:
+          type: string
+          format: date-time
+          example: "2024-04-04T00:12:45Z"
+        status:
+          $ref: "#/components/schemas/OrderStatus"
+        paymentMethod:
+          $ref: "#/components/schemas/PaymentMethod"
 
   examples:
     BadRequest:
