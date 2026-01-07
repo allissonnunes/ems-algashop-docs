@@ -55,9 +55,14 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Customer'
+                allOf:
+                  - type: object
+                    properties:
+                      content:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Customer'
+                  - $ref: '#/components/schemas/Page'
         500:
           $ref: '#/components/responses/InternalServerError'
 
@@ -408,6 +413,26 @@ components:
           type: string
           description: Instance identifier
           example: '/api/customers'
+
+    Page:
+      type: object
+      required: [ 'content', 'number', 'size', 'totalElements', 'totalPages' ]
+      properties:
+        number:
+          type: integer
+          description: Page number
+          example: 0
+        size:
+          type: integer
+          description: Page size
+        totalElements:
+          type: integer
+          description: Total number of elements
+          example: 100
+        totalPages:
+          type: integer
+          description: Total number of pages
+          example: 10
 
   examples:
     BadRequest:
