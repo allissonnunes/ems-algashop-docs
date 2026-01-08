@@ -339,7 +339,165 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
 
+  /api/v1/shopping-carts/{shoppingCartId}:
+    get:
+      summary: Retrieve shopping cart by ID
+      description: Retrieve shopping cart by ID
+      operationId: getShoppingCartById
+      tags:
+        - Shopping Carts
+      parameters:
+        - name: shoppingCartId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the shopping cart to retrieve
+          example: '277297bf-e586-4389-9f21-b3ce0c3f6580'
+      responses:
+        200:
+          description: Shopping cart retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingCart'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Delete shopping cart by ID
+      description: Delete shopping cart by ID
+      operationId: deleteShoppingCartById
+      tags:
+        - Shopping Carts
+      parameters:
+        - name: shoppingCartId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the shopping cart to delete
+          example: '277297bf-e586-4389-9f21-b3ce0c3f6580'
+      responses:
+        204:
+          description: Shopping cart deleted successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
+  /api/v1/shopping-carts/{shoppingCartId}/items:
+    post:
+      summary: Add or update item to shopping cart
+      description: Add or update item to shopping cart
+      operationId: addOrUpdateItemToShoppingCart
+      tags:
+        - Shopping Carts
+        - Shopping Cart Items
+      parameters:
+        - name: shoppingCartId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the shopping cart to add or update item to
+          example: '277297bf-e586-4389-9f21-b3ce0c3f6580'
+      responses:
+        204:
+          description: Item added or updated successfully
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      summary: Retrieve items from shopping cart
+      description: Retrieve items from shopping cart
+      operationId: getItemsFromShoppingCart
+      tags:
+        - Shopping Carts
+        - Shopping Cart Items
+      parameters:
+        - name: shoppingCartId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the shopping cart to retrieve
+          example: '277297bf-e586-4389-9f21-b3ce0c3f6580'
+      responses:
+        200:
+          description: Items retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingCartItemList'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      summary: Delete all items from shopping cart
+      description: Delete all items from shopping cart
+      operationId: deleteAllItemsFromShoppingCart
+      tags:
+        - Shopping Carts
+        - Shopping Cart Items
+      parameters:
+        - name: shoppingCartId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the shopping cart to delete
+          example: '277297bf-e586-4389-9f21-b3ce0c3f6580'
+      responses:
+        204:
+          description: All items deleted successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/v1/shopping-carts/{shoppingCartId}/items/{itemId}:
+    delete:
+      summary: Delete item from shopping cart
+      description: Delete item from shopping cart
+      operationId: deleteItemFromShoppingCart
+      tags:
+        - Shopping Carts
+        - Shopping Cart Items
+      parameters:
+        - name: shoppingCartId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the shopping cart to delete
+          example: '277297bf-e586-4389-9f21-b3ce0c3f6580'
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the item to delete
+          example: '177297bf-e586-4389-9f21-a3ce0c3f6580'
+      responses:
+        204:
+          description: Item deleted successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
 components:
   parameters:
