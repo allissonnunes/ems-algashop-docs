@@ -406,6 +406,11 @@ paths:
             format: uuid
           description: ID of the shopping cart to add or update item to
           example: '277297bf-e586-4389-9f21-b3ce0c3f6580'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingCartItemInput'
       responses:
         204:
           description: Item added or updated successfully
