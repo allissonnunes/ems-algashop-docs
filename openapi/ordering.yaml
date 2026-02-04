@@ -22,7 +22,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CustomerInput'
       responses:
-        201:
+        '201':
           description: Customer registered successfully
           content:
             application/json:
@@ -34,13 +34,13 @@ paths:
                 type: string
                 example: '/api/v1/customers/019b962e-cebd-7910-a5df-0afe586d05fe'
               description: URL of the newly created resource
-        400:
+        '400':
           $ref: '#/components/responses/BadRequest'
-        409:
+        '409':
           $ref: '#/components/responses/Conflict'
-        422:
+        '422':
           $ref: '#/components/responses/UnprocessableEntity'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
 
     get:
@@ -70,7 +70,7 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/direction'
       responses:
-        200:
+        '200':
           description: List of customers
           content:
             application/json:
@@ -83,7 +83,7 @@ paths:
                         items:
                           $ref: '#/components/schemas/CustomerSummary'
                   - $ref: '#/components/schemas/Page'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
 
   /api/v1/customers/{customerId}:
@@ -103,15 +103,15 @@ paths:
             example: '019b962e-cebd-7910-a5df-0afe586d05fe'
           description: ID of the customer to retrieve
       responses:
-        200:
+        '200':
           description: Customer details
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Customer'
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
 
     put:
@@ -135,19 +135,19 @@ paths:
             schema:
               $ref: '#/components/schemas/CustomerUpdateInput'
       responses:
-        200:
+        '200':
           description: Customer updated successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Customer'
-        400:
+        '400':
           $ref: '#/components/responses/BadRequest'
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        409:
+        '409':
           $ref: '#/components/responses/Conflict'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
 
     delete:
@@ -166,11 +166,40 @@ paths:
             example: '019b962e-cebd-7910-a5df-0afe586d05fe'
           description: ID of the customer to delete
       responses:
-        204:
+        '204':
           description: Customer deleted successfully
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        500:
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/v1/customers/{customerId}/shopping-cart:
+    get:
+      summary: Retrieve customer's shopping cart
+      description: Retrieve customer's shopping cart
+      operationId: getCustomerShoppingCartById
+      tags:
+        - Customers
+        - Shopping Carts
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: '019b962e-cebd-7910-a5df-0afe586d05fe'
+          description: ID of the customer to retrieve
+      responses:
+        '200':
+          description: Shopping cart retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingCart'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
           $ref: '#/components/responses/InternalServerError'
 
   /api/v1/orders:
@@ -232,7 +261,7 @@ paths:
         - $ref: '#/components/parameters/sort'
         - $ref: '#/components/parameters/direction'
       responses:
-        200:
+        '200':
           description: List of orders
           content:
             application/json:
@@ -245,7 +274,7 @@ paths:
                         items:
                           $ref: '#/components/schemas/OrderSummary'
                   - $ref: '#/components/schemas/Page'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
     post:
       summary: Register new order
@@ -262,7 +291,7 @@ paths:
             schema:
               $ref: '#/components/schemas/OrderWithProductInput'
       responses:
-        201:
+        '201':
           description: Order registered successfully
           content:
             application/json:
@@ -274,13 +303,13 @@ paths:
                 type: string
                 example: '/api/v1/orders/01226N0693HDE'
               description: URL of the newly created resource
-        400:
+        '400':
           $ref: '#/components/responses/BadRequest'
-        409:
+        '409':
           $ref: '#/components/responses/Conflict'
-        422:
+        '422':
           $ref: '#/components/responses/UnprocessableEntity'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
 
   /api/v1/orders/{orderId}:
@@ -298,15 +327,15 @@ paths:
             type: string
           description: ID of the order to retrieve
       responses:
-        200:
+        '200':
           description: Order retrieved successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
 
   /api/v1/shopping-carts:
@@ -322,7 +351,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ShoppingCartInput'
       responses:
-        201:
+        '201':
           description: Shopping cart registered successfully
           content:
             application/json:
@@ -334,9 +363,9 @@ paths:
                 type: string
                 example: '/api/v1/shopping-carts/019b962e-cebd-7910-a5df-0afe586d05fe'
               description: URL of the newly created resource
-        400:
+        '400':
           $ref: '#/components/responses/BadRequest'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
 
   /api/v1/shopping-carts/{shoppingCartId}:
@@ -356,15 +385,15 @@ paths:
           description: ID of the shopping cart to retrieve
           example: '277297bf-e586-4389-9f21-b3ce0c3f6580'
       responses:
-        200:
+        '200':
           description: Shopping cart retrieved successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ShoppingCart'
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
       summary: Delete shopping cart by ID
@@ -382,11 +411,11 @@ paths:
           description: ID of the shopping cart to delete
           example: '277297bf-e586-4389-9f21-b3ce0c3f6580'
       responses:
-        204:
+        '204':
           description: Shopping cart deleted successfully
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
 
   /api/v1/shopping-carts/{shoppingCartId}/items:
@@ -412,13 +441,13 @@ paths:
             schema:
               $ref: '#/components/schemas/ShoppingCartItemInput'
       responses:
-        204:
+        '204':
           description: Item added or updated successfully
-        400:
+        '400':
           $ref: '#/components/responses/BadRequest'
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
     get:
       summary: Retrieve items from shopping cart
@@ -437,15 +466,15 @@ paths:
           description: ID of the shopping cart to retrieve
           example: '277297bf-e586-4389-9f21-b3ce0c3f6580'
       responses:
-        200:
+        '200':
           description: Items retrieved successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ShoppingCartItemList'
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
       summary: Delete all items from shopping cart
@@ -464,11 +493,11 @@ paths:
           description: ID of the shopping cart to delete
           example: '277297bf-e586-4389-9f21-b3ce0c3f6580'
       responses:
-        204:
+        '204':
           description: All items deleted successfully
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
 
   /api/v1/shopping-carts/{shoppingCartId}/items/{itemId}:
@@ -497,11 +526,11 @@ paths:
           description: ID of the item to delete
           example: '177297bf-e586-4389-9f21-a3ce0c3f6580'
       responses:
-        204:
+        '204':
           description: Item deleted successfully
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
 components:
   parameters:
